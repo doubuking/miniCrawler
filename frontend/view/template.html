@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>baletu  </title>
+    <link rel="stylesheet" href="css/layui.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/layui.js"></script>
+</head>
+<body>
+<style>
+  .layui-form-item {
+    margin-top: 15px;
+  }
+  .layui-input-block{
+    width: 300px;
+    float: left;
+    margin-left: 0;
+  }
+  td.on{
+    border-bottom: 1px solid #D60711;
+    color: #D60711;
+  }
+  td.active{
+    background: #D60711;
+    color: #fff;
+  }
+  .search_div{
+    position: fixed;
+    z-index: 2;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+  }
+  .layui-table {
+    width: 1920px;
+    background-color: #fff;
+    color: #666;
+}
+</style>
+<!-- 搜索组件 -->
+<div class="search_div">
+  <form class="layui-form" action="/search" method="get" >
+    <div class="layui-form-item">
+      <label class="layui-form-label">输入关键字</label>
+      <div class="layui-input-block">
+        <input type="text" name="q" required  lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input" id="searchInput" value="{{.Query}}">
+      </div>
+      <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="formDemo" type="submit">搜索</button>
+      </div>
+      <div class="layui-input-block">  
+        <h5>共为您找到相关结果约为{{.Hits}}个.显示从{{.Start}}起共{{len .Items}}
+        </h5>
+      </div>
+    </div>
+  </form>
+</div>
+<p style="height: 70px;"></p>
+<table class="layui-table" id="all_list">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>编号</th>
+      <th>价格</th>
+      <th>名称</th>
+      <th>面积</th>
+      <th>朝向</th>
+      <th>交通</th>
+      <th>户型</th>
+      <th>楼层</th>
+      <th>类型</th>
+      <th>付款方式</th>
+      <th>区域</th>
+      <th>地址</th>
+
+    </tr>
+
+  </thead>
+  <tbody>
+    {{range .Items}}
+      <tr>
+        <td>{{ .Id}}</td>
+        <td class="list_one"><a href="{{.Url}}">{{ .Payload.Name}}</a></td>
+        {{with .Payload}}
+        <td>{{.Price}}元/月</td>
+        <td>{{.Area}}㎡</td>
+        <td>{{.Direction}}</td>
+        <td>{{.Traffic}}</td>
+        <td>{{.HouseType}}</td>
+        <td>{{.Floor}}</td>
+        <td>{{.LifeType}}</td>
+        <td>{{.PaymentMethod}}</td>
+        <td>{{.Region}}</td>
+        <td>{{.Address}}</td>
+
+        {{end}}
+      </tr>
+    {{else}}
+    <td>没有找到相关用户<td>
+    {{end}}
+  </tbody>
+</table>
+<div align="middle">
+
+    {{ if ge .PrevFrom 0}}
+    <a href="search?q={{.Query}}&from={{.PrevFrom}}">上一页</a>
+    {{end}}
+    <a href="search?q={{.Query}}&from={{.NextFrom}}">下一页</a>
+</div>
+<script>
+
+</script>
+
+</body>
+</html>
